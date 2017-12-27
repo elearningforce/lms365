@@ -1,0 +1,20 @@
+{
+  "author": "elearningforce",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "typescript": "^2.5.3"
+  },
+  "description": "Common modules",
+  "license": "ISC",
+  "main": "./dist/index.js",
+  "name": "ef.lms365",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc"
+  },
+  "types": "./dist/index.d.ts",
+  "typescript": {
+    "definition": "./dist/index.d.ts"
+  },
+  "version": "1.0.5"
+}
