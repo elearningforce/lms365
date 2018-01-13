@@ -5,7 +5,7 @@ import { GlobalConfig } from './global-config';
 
 export class Helper {
     public static Urls = {
-        getTenantInfo: (tenantId: string) => `/discovery/tenants/byid?id=${encodeURIComponent(tenantId)}`,
+        getTenantInfoById: (tenantId: string) => `/discovery/tenants/byid?id=${encodeURIComponent(tenantId)}`,
         getTenantInfoByWebUrl: (webUrl: string) => `/discovery/tenants/byurl?url=${encodeURIComponent(webUrl)}`
    };
 }

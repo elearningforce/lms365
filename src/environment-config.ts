@@ -42,4 +42,32 @@ export class EnvironmentConfig {
     public get assetsUrl(): string {
         return this._props.assetsUrl;
     }
+
+    public static get current(): EnvironmentConfig {
+        const regionPrefix = getRegionPrefix();
+
+        if (!regionPrefix) {
+            return null;
+        }
+
+        const appInfos: { [appType: string]: AppInfo } = {};
+        const globalConfig = GlobalConfig.instance;
+        const apiUrl = `https:\\\\${regionPrefix}-${globalConfig.apiHost}`;
+        const assetsUrl = `https:\\\\${regionPrefix}-${globalConfig.assetsHost}`;
+
+        for (let propertyName in AppType) {
+            const appType = parseInt(AppType[propertyName], 10);
+
+            if (appType) {
+                const appInfo = globalConfig.getAppInfo(appType);
+                appInfos[AppType[appType]] = { clientId: appInfo.clientId, host: `${regionPrefix}-${appInfo.host}` };
+            }
+        }
+
+        return new EnvironmentConfig({
+            apiUrl: apiUrl,
+            appInfos: appInfos,
+            assetsUrl: assetsUrl
+        });
+    }
 }

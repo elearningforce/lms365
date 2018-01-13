@@ -9,34 +9,35 @@ export abstract class EnvironmentConfigProvider {
     private readonly _environmentType: EnvironmentType;
     private _props: EnvironmentConfigProps;
 
-    protected constructor() {
+    public constructor() {
         this._environmentType = GlobalConfig.instance.environmentType;
     }
 
-    public async getByTenantId(tenantId: string): Promise<EnvironmentConfig> {
-        const cachedProps = this.storage.get(this.cacheKey);
-        const environmentConfig = cachedProps ? new EnvironmentConfig(cachedProps) : null;
+    public clear() {
+        this.storage.set(this.cacheKey, null);
+    }
 
-        if (environmentConfig != null) {
-            return new Promise<EnvironmentConfig>(
-                (resolve: (input: EnvironmentConfig) => void, reject: (reason?: any) => void) => {
-                    resolve(environmentConfig);
-                }
-            );
+    private async getByUrl(url: string): Promise<EnvironmentConfig> { 
+        const cachedProps = this.storage.get(this.cacheKey);
+        const environmentConfig = (cachedProps ? new EnvironmentConfig(cachedProps) : null);
+
+        if (EnvironmentConfig.current) {
+            return EnvironmentConfig.current;
         }
 
-        return new Promise<EnvironmentConfig>(
-            (resolve: (input: EnvironmentConfig) => void, reject: (reason?: any) => void) => {
-                this.queryExecuter.execute<any>({ url: GlobalConfig.instance.discoveryServerUrl + Helper.Urls.getTenantInfo(tenantId) })
-                    .then(props => {
-                        const environmentConfig = new EnvironmentConfig(props);
+        const props = await this.queryExecuter.execute<any>({ url: GlobalConfig.instance.discoveryServerUrl + url });
 
-                        this.storage.set(this.cacheKey, props);
+        this.storage.set(this.cacheKey, props);
 
-                        resolve(environmentConfig);
-                    })
-                    .catch(reject);
-            });
+        return new EnvironmentConfig(props);
+    }
+
+    public async getById(tenantId: string): Promise<EnvironmentConfig> {
+        return this.getByUrl(Helper.Urls.getTenantInfoByWebUrl(tenantId));
+    }
+
+    public async getByWebUrl(webUrl: string): Promise<EnvironmentConfig> {
+        return this.getByUrl(Helper.Urls.getTenantInfoByWebUrl(webUrl));
     }
 
     protected abstract get queryExecuter(): QueryExecuter;
