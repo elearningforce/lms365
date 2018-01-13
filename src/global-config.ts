@@ -55,6 +55,22 @@ export class GlobalConfig {
                     case AppType.Assignments: return { clientId: '93b5cf81-164e-48a1-a680-d94de11eff7c', host: 'assignments-ci.365.systems' };
                     case AppType.CourseCatalog: return { clientId: '92f52e5e-99ee-428f-9ee2-5d79f7fc6212', host: 'lms-ci.365.systems' };
                 };
+            case EnvironmentType.UsGovProduction:
+                switch (appType) {
+                    case AppType.Quiz: return { clientId: 'efd66a39-3e55-4f43-b37f-4093a8a35a41', host: 'quiz.usgcc365.systems' };
+                    case AppType.Scorm: return { clientId: '86bf0ee0-8c74-446d-8f41-c935f2b745c1', host: 'scorm.usgcc365.systems' };
+                    case AppType.LearningPath: return { clientId: '97259867-b441-435c-a1e0-8c584077b1f3', host: 'learningpath.usgcc365.systems' };
+                    case AppType.Assignments: return { clientId: 'e11b922c-8585-46ad-9e72-6b94dd1fde16', host: 'assignments.usgcc365.systems' };
+                    case AppType.CourseCatalog: return { clientId: '741fafd5-bbc1-40ad-8ad3-1f39c0f74dcf', host: 'lms.usgcc365.systems' };
+                };
+            case EnvironmentType.UsGovQa:
+                switch (appType) {
+                    case AppType.Quiz: return { clientId: '1751d2d5-f55c-4e1d-856b-b51c1c1dc843', host: 'quiz-qa.usgcc365.systems' };
+                    case AppType.Scorm: return { clientId: '4598cbf8-f593-480b-8189-0964fb189e34', host: 'scorm-qa.usgcc365.systems' };
+                    case AppType.LearningPath: return { clientId: 'e12e48b9-d860-403c-8d79-638cef9dbb6f', host: 'learningpath-qa.usgcc365.systems' };
+                    case AppType.Assignments: return { clientId: '70cb4ecc-b458-4694-a755-b650a1cfb5dd', host: 'assignments-qa.usgcc365.systems' };
+                    case AppType.CourseCatalog: return { clientId: '74700d56-f3f2-4caa-95bd-ed9084edd6bd', host: 'lms-qa.usgcc365.systems' };
+                };
         }
     }
 
@@ -80,6 +96,10 @@ export class GlobalConfig {
                 return 'api-qa.365.systems';
             case EnvironmentType.CI:
                  return 'api-ci.365.systems';
+            case EnvironmentType.UsGovProduction:
+                 return 'api.usgcc365.systems';
+            case EnvironmentType.UsGovQa:
+                 return 'api-qa.usgcc365.systems';
         }
     }
 
@@ -93,11 +113,15 @@ export class GlobalConfig {
                 return 'assets-qa.365.systems';
             case EnvironmentType.CI:
                  return 'assets-ci.365.systems';
+            case EnvironmentType.UsGovProduction:
+                 return 'assets.usgcc365.systems';
+            case EnvironmentType.UsGovQa:
+                 return 'assets-qa.usgcc365.systems';
         }
     }
 
     public get discoveryServerUrl(): string {
-        switch(this._environmentType){
+        switch (this._environmentType) {
             case EnvironmentType.Development:
                 return 'https://api-dev.365.systems';
             case EnvironmentType.Production:
@@ -106,6 +130,10 @@ export class GlobalConfig {
                 return 'https://api-qa.365.systems';
             case EnvironmentType.CI:
                 return 'https://api-ci.365.systems';
+            case EnvironmentType.UsGovProduction:
+                return 'https://api.usgcc365.systems';
+            case EnvironmentType.UsGovQa:
+                return 'https://api-qa.usgcc365.systems';
         }
     }
 
