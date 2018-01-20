@@ -1,7 +1,13 @@
 ﻿import { AppInfo, AppType } from './common';
 import { GlobalConfig } from './global-config';
 
+var isBrowser = ('window' in this);
+
 function getRegionPrefix(): string {
+    if (!isBrowser) {
+        return null;
+    }
+
     const globalConfig = GlobalConfig.instance;
 
     for (let propertyName in AppType) {

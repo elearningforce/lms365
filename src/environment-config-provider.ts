@@ -33,7 +33,7 @@ export abstract class EnvironmentConfigProvider {
     }
 
     public async getById(tenantId: string): Promise<EnvironmentConfig> {
-        return this.getByUrl(Helper.Urls.getTenantInfoByWebUrl(tenantId));
+        return this.getByUrl(Helper.Urls.getTenantInfoById(tenantId));
     }
 
     public async getByWebUrl(webUrl: string): Promise<EnvironmentConfig> {
