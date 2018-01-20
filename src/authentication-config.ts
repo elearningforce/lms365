@@ -1,13 +1,11 @@
 import { EnvironmentType } from './common';
 import { GlobalConfig } from './global-config';
 
-const globalConfig = GlobalConfig.instance;
-
 export class AuthenticationConfig {
-    public static instance: AuthenticationConfig = new AuthenticationConfig();
+    private static _instance: AuthenticationConfig = new AuthenticationConfig();
 
     public get clientId(): string {
-        switch (globalConfig.environmentType) {
+        switch (GlobalConfig.instance.environmentType) {
             case EnvironmentType.CI:
             case EnvironmentType.Development:
             case EnvironmentType.QA:
@@ -20,7 +18,7 @@ export class AuthenticationConfig {
     }
 
     public get resourceId(): string {
-        switch (globalConfig.environmentType) {
+        switch (GlobalConfig.instance.environmentType) {
             case EnvironmentType.CI:
             case EnvironmentType.Development:
             case EnvironmentType.QA:
@@ -30,5 +28,9 @@ export class AuthenticationConfig {
             default:
                 throw 'Unknown environment configuration.';
         }
+    }
+
+    public static get instance() {
+        return AuthenticationConfig._instance = AuthenticationConfig._instance || new AuthenticationConfig();
     }
 }
