@@ -17,5 +17,6 @@ export enum EnvironmentType {
     QA,
     CI,
     UsGovProduction,
-    UsGovQa
+    UsGovQa,
+    Hotfix
 }

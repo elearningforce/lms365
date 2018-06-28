@@ -1,3 +1,4 @@
+import { AuthenticationConfig } from './authentication-config';
 import { AppType, AppInfo, EnvironmentType } from './common';
 
 declare const process: { env: { NODE_ENV: string } };
@@ -15,9 +16,15 @@ function getCurrentEnvironmentType(): EnvironmentType {
 
 export class GlobalConfig {
     private static _instance: GlobalConfig;
+
+    private readonly _authentication: AuthenticationConfig
     private readonly _environmentType: EnvironmentType;
 
     private constructor(environmentType: EnvironmentType) {
+        if ((environmentType != EnvironmentType.UsGovQa) && (environmentType != EnvironmentType.UsGovProduction)) {
+            this._authentication = new AuthenticationConfig(environmentType);
+        }
+
         this._environmentType = environmentType;
     }
 
@@ -57,11 +64,11 @@ export class GlobalConfig {
                 };
             case EnvironmentType.UsGovProduction:
                 switch (appType) {
-                    case AppType.Quiz: return { clientId: 'efd66a39-3e55-4f43-b37f-4093a8a35a41', host: 'quiz.usgcc365.systems' };
-                    case AppType.Scorm: return { clientId: '86bf0ee0-8c74-446d-8f41-c935f2b745c1', host: 'scorm.usgcc365.systems' };
-                    case AppType.LearningPath: return { clientId: '97259867-b441-435c-a1e0-8c584077b1f3', host: 'learningpath.usgcc365.systems' };
-                    case AppType.Assignments: return { clientId: 'e11b922c-8585-46ad-9e72-6b94dd1fde16', host: 'assignments.usgcc365.systems' };
-                    case AppType.CourseCatalog: return { clientId: '741fafd5-bbc1-40ad-8ad3-1f39c0f74dcf', host: 'lms.usgcc365.systems' };
+                    case AppType.Quiz: return { clientId: '2e700419-e31e-4590-b007-4b624c14e4fb', host: 'quiz.usgcc365.systems' };
+                    case AppType.Scorm: return { clientId: '4ba494c2-b6e6-4333-8b5d-1342cc5d80aa', host: 'scorm.usgcc365.systems' };
+                    case AppType.LearningPath: return { clientId: '708ea500-d317-4e0a-a18c-aa3461547cab', host: 'learningpath.usgcc365.systems' };
+                    case AppType.Assignments: return { clientId: 'f7f0a4fb-7180-47b0-a6f9-8e65040764ad', host: 'assignments.usgcc365.systems' };
+                    case AppType.CourseCatalog: return { clientId: '576438d1-4ce5-4d7f-a504-44e970eaa797', host: 'lms.usgcc365.systems' };
                 };
             case EnvironmentType.UsGovQa:
                 switch (appType) {
@@ -71,8 +78,16 @@ export class GlobalConfig {
                     case AppType.Assignments: return { clientId: '70cb4ecc-b458-4694-a755-b650a1cfb5dd', host: 'assignments-qa.usgcc365.systems' };
                     case AppType.CourseCatalog: return { clientId: '74700d56-f3f2-4caa-95bd-ed9084edd6bd', host: 'lms-qa.usgcc365.systems' };
                 };
+            case EnvironmentType.Hotfix:
+                switch (appType) {
+                    case AppType.Quiz: return { clientId: '53ba37ea-f9ab-4dd4-b9db-8158a8622259', host: 'quiz-hotfix.365.systems' };
+                    case AppType.Scorm: return { clientId: '433d048b-9ede-4068-acfd-fb6ed5b28a81', host: 'scorm-hotfix.365.systems' };
+                    case AppType.LearningPath: return { clientId: 'd44a0ff9-b967-41da-ab6e-c28bb64f08a8', host: 'learningpath-hotfix.365.systems' };
+                    case AppType.Assignments: return { clientId: '0241f4e7-879c-4f01-80d8-ea8d623b4f20', host: 'assignments-hotfix.365.systems' };
+                    case AppType.CourseCatalog: return { clientId: 'bb252f85-d921-4470-a28c-22083e2657c6', host: 'lms-hotfix.365.systems' };
+                };
         }
-    }
+    }  
 
     public getAppInfoByHost(host: string): AppInfo {
         for (let property in AppType) {
@@ -100,6 +115,8 @@ export class GlobalConfig {
                  return 'api.usgcc365.systems';
             case EnvironmentType.UsGovQa:
                  return 'api-qa.usgcc365.systems';
+            case EnvironmentType.Hotfix:
+                return 'api-hotfix.365.systems';
         }
     }
 
@@ -120,6 +137,10 @@ export class GlobalConfig {
         }
     }
 
+    public get authentication(): AuthenticationConfig {
+        return this._authentication;
+    }
+
     public get discoveryServerUrl(): string {
         switch (this._environmentType) {
             case EnvironmentType.Development:
@@ -134,6 +155,9 @@ export class GlobalConfig {
                 return 'https://api.usgcc365.systems';
             case EnvironmentType.UsGovQa:
                 return 'https://api-qa.usgcc365.systems';
+            case EnvironmentType.Hotfix:
+                return 'https://api-hotfix.365.systems';
+
         }
     }
 
