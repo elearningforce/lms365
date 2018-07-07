@@ -1,5 +1,14 @@
-export interface AppInfo { 
-    clientId: string,
+export enum AzureAppType
+{
+    GraphApi = 1,
+    Lms,
+    LmsApi,
+    SharePointApi
+}
+
+export interface AppInfo {
+    baseUrl: string;
+    clientId: string;
     host: string;
 }
 

@@ -1,10 +1,10 @@
-﻿import { AppInfo, AppType } from './common';
+﻿import { AppInfo, AppType, AzureAppType } from './common';
 import { GlobalConfig } from './global-config';
 
 export interface EnvironmentConfigProps {
-    apiUrl: string;
-    appInfos: { [appType: string]: AppInfo };
-    assetsUrl: any;
+    appInfos: { [appType: number]: AppInfo };
+    assetsUrl: string;
+    azureAppInfos: { [azureAppType: number]: AppInfo };
 }
 
 export class EnvironmentConfig {
@@ -14,15 +14,19 @@ export class EnvironmentConfig {
         this._props = props;
     }
 
-    public getAppInfo(appType: AppType): AppInfo {
-        return this._props.appInfos[AppType[appType]];
-    }
-
     public get apiUrl(): string {
-        return this._props.apiUrl;
+        return this._props.azureAppInfos[AzureAppType.LmsApi].baseUrl;
     }
 
     public get assetsUrl(): string {
         return this._props.assetsUrl;
+    }
+
+    public get appInfos(): { [appType: number]: AppInfo } {
+        return this._props.appInfos;
+    }
+
+    public get azureAppInfos(): { [azureAppType: number]: AppInfo } {
+        return this._props.azureAppInfos;
     }
 }
