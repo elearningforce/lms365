@@ -1,10 +1,10 @@
-﻿import { AppInfo, AppType, AzureAppType } from './common';
+﻿import { AppInfo, AppType, AzureAppType, AzureAppInfo } from './common';
 import { GlobalConfig } from './global-config';
 
 export interface EnvironmentConfigProps {
     appInfos: { [appType: number]: AppInfo };
     assetsUrl: string;
-    azureAppInfos: { [azureAppType: number]: AppInfo };
+    azureAppInfos: { [azureAppType: number]: AzureAppInfo };
 }
 
 export class EnvironmentConfig {
@@ -26,7 +26,7 @@ export class EnvironmentConfig {
         return this._props.appInfos;
     }
 
-    public get azureAppInfos(): { [azureAppType: number]: AppInfo } {
+    public get azureAppInfos(): { [azureAppType: number]: AzureAppInfo } {
         return this._props.azureAppInfos;
     }
 }
