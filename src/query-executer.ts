@@ -6,6 +6,7 @@ export enum HttpMethod {
 }
 
 export interface Query {
+    async?: boolean;
     contentType?: string | boolean;
     data?: any;
     ignoreProcessData?: boolean;
@@ -17,4 +18,5 @@ export interface Query {
 export interface QueryExecuter {
     execute<T>(query: Query): Promise<T>;
     execute<TInput, TOutput>(query: Query, convert?: (input: TInput) => TOutput): Promise<TOutput>;
+    executeSync<TOutput>(query: Query, converter?: (input: string) => TOutput): TOutput;
 }
