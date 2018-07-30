@@ -12,6 +12,7 @@ export interface Query {
     ignoreProcessData?: boolean;
     jsonRequestPayload?: boolean;
     method?: HttpMethod;
+    headers?: {[key: string]: string};
     url: string;
 }
 
