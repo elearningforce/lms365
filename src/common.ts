@@ -7,7 +7,7 @@ export enum AzureAppType
 }
 
 export interface AppInfo {
-    baseUrl: string;
+    baseUrl?: string;
     clientId: string;
     host: string;
 }

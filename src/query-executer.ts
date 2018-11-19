@@ -15,5 +15,5 @@ export interface Query {
 
 export interface QueryExecuter {
     execute<T>(query: Query): Promise<T>;
-    execute<TInput, TOutput>(query: Query, convert?: (input: TInput) => TOutput): Promise<TOutput>;
+    execute<T>(query: Query, resolve?: (result: T) => void, reject?: (error: any) => void);
 }

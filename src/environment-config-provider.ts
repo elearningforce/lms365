@@ -28,15 +28,27 @@ export abstract class EnvironmentConfigProvider {
         }
     }
 
-    private async getByContextOrUrl(url: string): Promise<EnvironmentConfig> { 
+    private async getByContextOrUrl(url: string, resolve?: (environmentConfig: EnvironmentConfig) => void, reject?: (error: any) => void): Promise<EnvironmentConfig> { 
         const cachedProps = this.storage.get(this.cacheKey);
         const environmentConfig = cachedProps && new EnvironmentConfig(cachedProps);
 
-        if (environmentConfig) {
+        if (environmentConfig && environmentConfig.appInfos) {
+            if (resolve) {
+                resolve(environmentConfig);
+            }
+
             return environmentConfig;
         }
 
-        const props = await this.queryExecuter.execute<any>({ url: GlobalConfig.instance.discoveryServerUrl + url }) as EnvironmentConfigProps;
+        const props = await this.queryExecuter.execute<any>(
+            { url: GlobalConfig.instance.discoveryServerUrl + url },
+            props => {
+                if (resolve) {
+                    resolve(props);
+                }
+            },
+            reject
+        ) as EnvironmentConfigProps;
 
         EnvironmentConfigProvider.correctProps(props);
         this.storage.set(this.cacheKey, props);
@@ -44,12 +56,12 @@ export abstract class EnvironmentConfigProvider {
         return new EnvironmentConfig(props);
     }
 
-    public async getByTenantId(tenantId: string): Promise<EnvironmentConfig> {
-        return this.getByContextOrUrl(Helper.Urls.getTenantInfoById(tenantId));
+    public async getByTenantId(tenantId: string, resolve?: (environmentConfig: EnvironmentConfig) => void, reject?: (error: any) => void): Promise<EnvironmentConfig> {
+        return this.getByContextOrUrl(Helper.Urls.getTenantInfoById(tenantId), resolve, reject);
     }
 
-    public async getByWebUrl(webUrl: string): Promise<EnvironmentConfig> {
-        return this.getByContextOrUrl(Helper.Urls.getTenantInfoByWebUrl(webUrl));
+    public async getByWebUrl(webUrl: string, resolve?: (environmentConfig: EnvironmentConfig) => void, reject?: (error: any) => void): Promise<EnvironmentConfig> {
+        return this.getByContextOrUrl(Helper.Urls.getTenantInfoByWebUrl(webUrl), resolve, reject);
     }
 
     public updateCache(props: EnvironmentConfigProps): EnvironmentConfig {
