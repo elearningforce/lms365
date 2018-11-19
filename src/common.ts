@@ -10,6 +10,12 @@ export interface AppInfo {
     baseUrl?: string;
     clientId: string;
     host: string;
+    globalHost?: string;
+}
+
+export interface AzureAppInfo {
+    baseUrl: string;
+    clientId: string;
 }
 
 export enum AppType {
