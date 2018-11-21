@@ -31,6 +31,10 @@ export abstract class EnvironmentConfigProvider {
     private async getByContextOrUrl(url: string, resolve?: (environmentConfig: EnvironmentConfig) => void, reject?: (error: any) => void): Promise<EnvironmentConfig> { 
         const cachedProps = this.storage.get(this.cacheKey);
         const environmentConfig = cachedProps && new EnvironmentConfig(cachedProps);
+        const saveProps = props => {
+            EnvironmentConfigProvider.correctProps(props);
+            this.storage.set(this.cacheKey, props);
+        };
 
         if (environmentConfig && environmentConfig.appInfos) {
             if (resolve) {
@@ -40,20 +44,24 @@ export abstract class EnvironmentConfigProvider {
             return environmentConfig;
         }
 
-        const props = await this.queryExecuter.execute<any>(
-            { url: GlobalConfig.instance.discoveryServerUrl + url },
-            props => {
-                if (resolve) {
+        const query = { url: GlobalConfig.instance.discoveryServerUrl + url };
+
+        if (resolve) {
+            this.queryExecuter.execute<any>(
+                query,
+                props => {
+                    saveProps(props);
                     resolve(props);
-                }
-            },
-            reject
-        ) as EnvironmentConfigProps;
+                },
+                reject
+            );
+        } else {
+            const props = await this.queryExecuter.execute<any>(query) as EnvironmentConfigProps;
 
-        EnvironmentConfigProvider.correctProps(props);
-        this.storage.set(this.cacheKey, props);
-
-        return new EnvironmentConfig(props);
+            saveProps(props);
+    
+            return new EnvironmentConfig(props);
+        }
     }
 
     public async getByTenantId(tenantId: string, resolve?: (environmentConfig: EnvironmentConfig) => void, reject?: (error: any) => void): Promise<EnvironmentConfig> {

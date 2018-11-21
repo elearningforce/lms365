@@ -27,8 +27,8 @@ export enum AppType {
 }
 
 export enum EnvironmentType {
-    Development,
-    Production,
+    Dev,
+    Prod,
     QA,
     CI,
     UsGovProduction,

@@ -5,7 +5,7 @@ declare const process: { env: { NODE_ENV: string } };
 declare const __webpack_hash__: string;
 
 function getCurrentEnvironmentType(): EnvironmentType {
-    const environmentTypeValue = process.env.NODE_ENV.toLowerCase();
+    const environmentTypeValue = ((window ? window['EF.LMS365.Environment'] : null) || process.env.NODE_ENV).toLowerCase();
 
     for (let value in EnvironmentType) {
         if (value.toLowerCase() == environmentTypeValue) {
@@ -34,9 +34,9 @@ export class GlobalConfig {
 
     public get discoveryServerUrl(): string {
         switch (this._environmentType) {
-            case EnvironmentType.Development:
+            case EnvironmentType.Dev:
                 return 'https://api-dev.365.systems';
-            case EnvironmentType.Production:
+            case EnvironmentType.Prod:
                 return 'https://api.365.systems';
             case EnvironmentType.QA:
                 return 'https://api-qa.365.systems';
@@ -48,7 +48,6 @@ export class GlobalConfig {
                 return 'https://api-qa.usgcc365.systems';
             case EnvironmentType.Hotfix:
                 return 'https://api-hotfix.365.systems';
-
         }
     }
 
