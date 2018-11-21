@@ -1,4 +1,4 @@
-import { AppType, AppInfo, AzureAppType, EnvironmentType } from './common';
+import { AppType, AppInfo, AzureAppType } from './common';
 import { EnvironmentConfig, EnvironmentConfigProps } from './environment-config';
 import { GlobalConfig } from './global-config';
 import { Helper } from './helper';
@@ -6,12 +6,7 @@ import { QueryExecuter } from './query-executer';
 import { Storage } from './storage';
 
 export abstract class EnvironmentConfigProvider {
-    private readonly _environmentType: EnvironmentType;
     private _props: EnvironmentConfigProps;
-
-    public constructor() {
-        this._environmentType = GlobalConfig.instance.environmentType;
-    }
 
     private static correctProps(props: EnvironmentConfigProps) {
         const appInfos = props.appInfos;
@@ -59,7 +54,7 @@ export abstract class EnvironmentConfigProvider {
             const props = await this.queryExecuter.execute<any>(query) as EnvironmentConfigProps;
 
             saveProps(props);
-    
+
             return new EnvironmentConfig(props);
         }
     }
@@ -81,7 +76,7 @@ export abstract class EnvironmentConfigProvider {
     protected abstract get queryExecuter(): QueryExecuter;
 
     protected get cacheKey(): string {
-        return `EF.LMS365.EnvironmentConfig.${this._environmentType}`;
+        return `EF.LMS365.EnvironmentConfig["${GlobalConfig.instance.discoveryServerUrl}"]`;
     }
 
     protected abstract get storage(): Storage;

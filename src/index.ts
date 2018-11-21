@@ -1,4 +1,3 @@
-export * from './authentication-config';
 export * from './common';
 export * from './environment-config';
 export * from './environment-config-provider';

@@ -1,65 +1,13 @@
-import { AuthenticationConfig } from './authentication-config';
-import { AppType, AppInfo, EnvironmentType } from './common';
-
-declare const process: { env: { NODE_ENV: string } };
 declare const __webpack_hash__: string;
 
-function getCurrentEnvironmentType(): EnvironmentType {
-    const environmentTypeValue = ((window ? window['EF.LMS365.Environment'] : null) || process.env.NODE_ENV).toLowerCase();
-
-    for (let value in EnvironmentType) {
-        if (value.toLowerCase() == environmentTypeValue) {
-            return EnvironmentType[value as string];
-        }
-    }
-}
-
 export class GlobalConfig {
-    private static _instance: GlobalConfig;
-
-    private readonly _authentication: AuthenticationConfig
-    private readonly _environmentType: EnvironmentType;
-
-    private constructor(environmentType: EnvironmentType) {
-        if ((environmentType != EnvironmentType.UsGovQa) && (environmentType != EnvironmentType.UsGovProduction)) {
-            this._authentication = new AuthenticationConfig(environmentType);
-        }
-
-        this._environmentType = environmentType;
-    }
-
-    public get authentication(): AuthenticationConfig {
-        return this._authentication;
-    }
+    public static readonly instance: GlobalConfig = new GlobalConfig();
 
     public get discoveryServerUrl(): string {
-        switch (this._environmentType) {
-            case EnvironmentType.Dev:
-                return 'https://api-dev.365.systems';
-            case EnvironmentType.Prod:
-                return 'https://api.365.systems';
-            case EnvironmentType.QA:
-                return 'https://api-qa.365.systems';
-            case EnvironmentType.CI:
-                return 'https://api-ci.365.systems';
-            case EnvironmentType.UsGovProduction:
-                return 'https://api.usgcc365.systems';
-            case EnvironmentType.UsGovQa:
-                return 'https://api-qa.usgcc365.systems';
-            case EnvironmentType.Hotfix:
-                return 'https://api-hotfix.365.systems';
-        }
-    }
-
-    public get environmentType() : EnvironmentType {
-        return this._environmentType;
+        return window['EF.LMS365.GlobalConfig.discoveryServerUrl'];
     }
 
     public get versionHash(): string {
         return __webpack_hash__;
-    }
-
-    public static get instance() {
-        return GlobalConfig._instance = GlobalConfig._instance || new GlobalConfig(getCurrentEnvironmentType());
     }
 }
