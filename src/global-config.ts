@@ -68,6 +68,16 @@ export class GlobalConfig {
         }
     }
 
+    public get loginEndPoint() : string {
+        switch(this.environmentType) {
+            case EnvironmentType.UsGovProduction:
+            case EnvironmentType.UsGovQa:
+                return 'https://login.microsoftonline.us'
+            default:
+                return 'https://login.microsoftonline.com'
+        }
+    }
+
     public get versionHash(): string {
         return __webpack_hash__;
     }
