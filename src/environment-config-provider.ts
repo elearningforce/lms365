@@ -6,8 +6,6 @@ import { QueryExecuter } from './query-executer';
 import { Storage } from './storage';
 
 export abstract class EnvironmentConfigProvider {
-    private _props: EnvironmentConfigProps;
-
     private static correctProps(props: EnvironmentConfigProps) {
         const appInfos = props.appInfos;
         const azureAppInfos = props.azureAppInfos;
@@ -76,7 +74,7 @@ export abstract class EnvironmentConfigProvider {
     protected abstract get queryExecuter(): QueryExecuter;
 
     protected get cacheKey(): string {
-        return `EF.LMS365.EnvironmentConfig["${GlobalConfig.instance.discoveryServerUrl}"]`;
+        return `EF.LMS365.EnvironmentConfig.${GlobalConfig.instance.environmentType}`;
     }
 
     protected abstract get storage(): Storage;

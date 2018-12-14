@@ -1,5 +1,12 @@
-﻿import { AppInfo, AppType, AzureAppType, AzureAppInfo } from './common';
-import { GlobalConfig } from './global-config';
+﻿import { AppInfo, AzureAppType, AzureAppInfo } from './common';
+
+function  getRegionPrefix(apiUrl: string): string {
+    const match = new RegExp(`https://([a-z]*)-.*`).exec(apiUrl);
+
+    if (match && (match.length == 2)) {
+        return match[1];
+    }
+}
 
 export interface EnvironmentConfigProps {
     appInfos: { [appType: number]: AppInfo };
@@ -12,6 +19,16 @@ export class EnvironmentConfig {
 
     public constructor(props: EnvironmentConfigProps) {
         this._props = props;
+    }
+
+    public getAssetHash(assetName: string) : string {
+        const regionHashes = window[`ef.lms365.hashes.${this.regionPrefix}`]
+
+        if(regionHashes) {
+            return regionHashes[assetName]
+        }
+
+        return null;
     }
 
     public get apiUrl(): string {
@@ -28,5 +45,9 @@ export class EnvironmentConfig {
 
     public get azureAppInfos(): { [azureAppType: number]: AzureAppInfo } {
         return this._props.azureAppInfos;
+    }
+
+    public get regionPrefix(): string {
+        return getRegionPrefix(this.apiUrl);
     }
 }

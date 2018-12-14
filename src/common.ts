@@ -25,3 +25,13 @@ export enum AppType {
     LearningPath = 4,
     Quiz = 5
 }
+
+export enum EnvironmentType {
+    Development,
+    Production,
+    QA,
+    CI,
+    UsGovProduction,
+    UsGovQa,
+    Hotfix
+}
