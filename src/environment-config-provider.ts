@@ -44,7 +44,8 @@ export abstract class EnvironmentConfigProvider {
                 query,
                 props => {
                     saveProps(props);
-                    resolve(props);
+
+                    resolve(new EnvironmentConfig(props));
                 },
                 reject
             );
