@@ -78,6 +78,26 @@ export class GlobalConfig {
         }
     }
 
+    /** To support compatibily with previous versions. Currently is used in Teams. */
+    public get assetsHost(): string {
+        switch (this.environmentType) {
+            case EnvironmentType.Development:
+                return 'assets-dev.365.systems';
+            case EnvironmentType.Production:
+                return 'assets.365.systems';
+            case EnvironmentType.QA:
+                return 'assets-qa.365.systems';
+            case EnvironmentType.CI:
+                 return 'assets-ci.365.systems';
+            case EnvironmentType.UsGovProduction:
+                 return 'assets.usgcc365.systems';
+            case EnvironmentType.UsGovQa:
+                 return 'assets-qa.usgcc365.systems';
+            case EnvironmentType.Hotfix:
+                 return 'assets-hotfix.365.systems';
+        }
+    }
+
     public get versionHash(): string {
         return __webpack_hash__;
     }
