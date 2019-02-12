@@ -1,5 +1,5 @@
 import { AuthenticationConfig } from './authentication-config';
-import { AppType, AppInfo, EnvironmentType } from './common';
+import { EnvironmentType } from './common';
 
 declare const process: { env: { NODE_ENV: string } };
 declare const __webpack_hash__: string;
@@ -21,10 +21,7 @@ export class GlobalConfig {
     private readonly _environmentType: EnvironmentType;
 
     private constructor(environmentType: EnvironmentType) {
-        if ((environmentType != EnvironmentType.UsGovQa) && (environmentType != EnvironmentType.UsGovProduction)) {
-            this._authentication = new AuthenticationConfig(environmentType);
-        }
-
+        this._authentication = new AuthenticationConfig(environmentType);
         this._environmentType = environmentType;
     }
 
