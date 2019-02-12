@@ -45,6 +45,16 @@ export class AuthenticationConfig {
         }
     }
 
+    public get loginEndPoint() : string {
+        switch(this._environmentType) {
+            case EnvironmentType.UsGovProduction:
+            case EnvironmentType.UsGovQa:
+                return 'https://login.microsoftonline.us'
+            default:
+                return 'https://login.microsoftonline.com'
+        }
+    }
+
     public get provisioningAppId(): string {
         switch (this._environmentType) {
             case EnvironmentType.CI:
