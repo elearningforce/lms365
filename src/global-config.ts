@@ -1,11 +1,11 @@
 import { AuthenticationConfig } from './authentication-config';
 import { EnvironmentType } from './common';
 
-declare const process: { env: { NODE_ENV: string } };
+declare const EF_LMS365_ENVIRONMENT: string;
 declare const __webpack_hash__: string;
 
 function getCurrentEnvironmentType(): EnvironmentType {
-    const environmentTypeValue = process.env.NODE_ENV.toLowerCase();
+    const environmentTypeValue = EF_LMS365_ENVIRONMENT.toLowerCase();
 
     for (let value in EnvironmentType) {
         if (value.toLowerCase() == environmentTypeValue) {
@@ -45,7 +45,6 @@ export class GlobalConfig {
                 return 'https://api-qa.usgcc365.systems';
             case EnvironmentType.Hotfix:
                 return 'https://api-hotfix.365.systems';
-
         }
     }
 
